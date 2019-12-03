@@ -10,3 +10,20 @@ library(rgdal)
 library(sp)
 ```
 
+### Reading the Datasets
+```{r}
+#Reading in the collisions dataset.
+# MVC_split <- read.csv(file="dataset/MVC_split.csv", header=TRUE, sep=",")
+
+#Changing into date format.
+MVC_split$DATE <- format(as.Date(MVC_split$DATE, "%m/%d/%Y"), "%Y-%m-%d" ) 
+
+#Reading in the daily weather dataset for NYC.
+WeatherByDate <- read.csv("dataset/NYC_weather.csv", header=TRUE, sep=",")
+WeatherByDate$DATE <- format(as.Date(WeatherByDate$DATE, "%m/%d/%Y"), "%Y-%m-%d" ) 
+  
+#NOAA weather data
+#SNOW - Snowfall
+#PRCP - Precipitation
+```
+
