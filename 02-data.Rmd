@@ -1,7 +1,17 @@
 # Data sources
 
-This project explores the more recent data from NYC Open Data [Data Set](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
+This project explores the more recent data from NYC Open Data for Motor vehicle Collisions[Data Set](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
 
 This dataset can also be reached and interacted with through its [Google BigQuery location](https://bigquery.cloud.google.com/table/bigquery-public-data:new_york.nypd_mv_collisions?tab=schema)
 
+### Supplementary Datasets used for Analysis.
+
+
+NOAA historical weather data: weather data collected by the station “USW00094789”, using the keyword “JFK INTERNATIONAL AIRPORT, NY US”. (https://www.climate.gov/maps-data/dataset/past-weather-zip-code-data-table). 
+
+Steps to get the data:
+(Data can be collected with zip code or county information.) 
+1.Click the link above, then click “Data Access” and choose “CDO Search” -In the Climate Data Online Search page -Choose “Daily Summaries”, Choose “Date Range”, Choose “Counties” for station -Enter “Queens, New York” and then click search -Filter data by weather station “USW00094789” or “JFK INTERNATIONAL AIRPORT, NY US”.
+
+2.Once in the result page, click “Add to cart” in Queens County, NY section, Click View Cart, Choose “Custom GHCN-Daily CSV” for output format -Once again confirm date range, click “continue” ,In custom output format, click “Select All” and “continue” -enter email address and confirm the subscription, the data file will be sent to the email address.
 
