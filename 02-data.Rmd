@@ -15,3 +15,12 @@ Steps to get the data:
 
 2.Once in the result page, click “Add to cart” in Queens County, NY section, Click View Cart, Choose “Custom GHCN-Daily CSV” for output format -Once again confirm date range, click “continue” ,In custom output format, click “Select All” and “continue” -enter email address and confirm the subscription, the data file will be sent to the email address.
 
+
+
+
+#API key
+```{r}
+api_key = "AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8"
+```
+
+
