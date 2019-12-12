@@ -11,13 +11,12 @@ chunk_output_type: console
 
 ******* image (location) - explain how got coords *******
 
-![]("")
 
 ```{r message=FALSE, warning=FALSE}
 # MAIN CLEANED DATA
-data <- subset(data, (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
+missing_data <- subset(data,  is.na(LATITUDE) | is.na(LONGITUDE) | (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
 
-missing_data <- data <- subset(data,  is.na(LATITUDE) | is.na(LONGITUDE) | (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
+data <- subset(data, (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
 ```
 
 ```{r message=FALSE, warning=FALSE}
