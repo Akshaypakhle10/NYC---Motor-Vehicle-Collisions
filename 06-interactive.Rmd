@@ -1,5 +1,8 @@
 # Interactive component
 
 
-- Trends during day, week, month, year
+An interactive plot to quickly understand the impact of accidents over the years has been made. [Link](https://karth2512.github.io/EDAV-INTERACTIVE/)
 
+The demo below shows how the distribution of injurous accidents in Manhattan in 2017 and the lethal accidents in Staten Island in 2017 can be fetched using just a few clicks.
+
+![](data/media/demo.gif)
