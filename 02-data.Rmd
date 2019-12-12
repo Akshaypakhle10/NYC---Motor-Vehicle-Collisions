@@ -19,6 +19,23 @@ library(ggpubr)
 library(cowplot)
 ```
 
+<<<<<<< HEAD
+```{r}
+dim(data)
+```
+
+The dataset consists of about 1.6 million reported incidents. We have about 29 features or decriptors for each data point. The names of these features and their data types are displayed below.
+
+```{r}
+as.matrix(lapply(data,class))
+```
+ The names are quite self-explainatory but a few notes have been highlighted below:
+- Depending on the number of vehicles involved in the crash the columns "CONTRIBUTING FACTOR VEHICLE 2", "CONTRIBUTING FACTOR VEHICLE 3", "CONTRIBUTING FACTOR VEHICLE 4" and "CONTRIBUTING FACTOR VEHICLE 5" may be missing. Similarly "VEHICLE TYPE CODE 2", "VEHICLE TYPE CODE 3", "VEHICLE TYPE CODE 4" and "VEHICLE TYPE CODE 5" could be missing for smaller crashes.
+- The columns "CROSS STREET NAME", "OFF STREET NAME", "ON STREET NAME", "ZIP CODE" and "LOCATION" are redundant as well as less accurate and are hence not used for location based analysis. We instead use the latitudes and longitudes. It should be noted that the dataset does not report the exact corrdinate of the collision, instead, it reports the coordinates of the nearest intersection.
+- "NUMBER OF PERSONS INJURED/KILLED" is the aggregation of the columns "NUMBER OF CYCLIST INJURED/KILLED" , "NUMBER OF MOTORIST INJURED/KILLED" and "NUMBER OF PEDESTRIANS INJURED/KILLED".
+
+We also use google static maps API to for plotting the spatial data. Instead of overlaying the image in the backgroud this gives us more control over the exploration.
+=======
 ```{r message=FALSE, warning=FALSE}
 data <- read_csv("dataset/MVC_split.csv")
 ```
@@ -38,12 +55,12 @@ dim(data_sample)
 ```{r}
 head(data_sample)
 ```
+>>>>>>> c176b0af6430ce29b5533f880314e8d7896cb374
 
 ```{r}
 colnames(data_sample)
 ```
 
-![]("")
 
 ```{r message=FALSE, warning=FALSE}
 api_key = "AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8"
