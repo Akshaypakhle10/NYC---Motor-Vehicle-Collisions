@@ -4,11 +4,23 @@
 - Data sources
 - Dataset and columns explanation
 
-```{r}
-data <- read_csv("dataset/MVC_split.csv")
+```{r message=FALSE, warning=FALSE}
+library(naniar)
+library(tidyverse)
+library(readr)
+library(maptools)
+library(ggmap)
+library(ggrepel)
+library(lubridate)
+library(ggplot2)
+library(gridExtra)
+library(grid)
+library(ggpubr)
+library(cowplot)
 ```
-```{r}
-dim(data)
+
+```{r message=FALSE, warning=FALSE}
+data <- read_csv("dataset/MVC_split.csv")
 ```
 
 Let's see how our dataset looks like, it's a huge dataset with 29 variables and over 1.6 million rows. 
@@ -16,7 +28,9 @@ Let's see how our dataset looks like, it's a huge dataset with 29 variables and 
 ```{r}
 head(data)
 ```
+
 We might need to use a sample of the data in some places. Let's have a look at the sample of 50,000 rows.
+
 ```{r}
 dim(data_sample)
 ```
@@ -29,9 +43,9 @@ head(data_sample)
 colnames(data_sample)
 ```
 
-**** google map ****
+![]("")
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 api_key = "AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8"
 ```
 

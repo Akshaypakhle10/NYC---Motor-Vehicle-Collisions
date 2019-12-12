@@ -1,22 +1,6 @@
 # Results
 
-- Vision zero: overall impact (number of people killed/injured, number of accidents),: multi bar chart
-slow zones impact (number of people killed, number of accidents), : number of accidents
-~ pedestrain crossing improvement: pedestrian deaths,
-a lot of cyclists killed in jan (then investigated that vision zero took certain steps),
-~priority corridor, 
-
-#- Weather: correlation (#accidents, #people killed, causes of accidents, type of vehicle)
-
-# causes facet by year
-# multi bar chart
-# location analysis
-
-# choropleth
-
-```{r message=FALSE}
-api_key = 'AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8'
-
+```{r message=FALSE, warning=FALSE}
 register_google(key = api_key)
 
 map_m <- get_map(location = 'manhattan, new york',zoom=12, maptype = 'roadmap',source = 'google',color = 'color')
@@ -25,287 +9,322 @@ map_bx <- get_map(location = 'bronx, new york',zoom=12, maptype = 'roadmap',sour
 map_bl <- get_map(location = 'brooklyn, new york',zoom=11, maptype = 'roadmap',source = 'google',color = 'color')
 map_s <- get_map(location = 'staten island, new york',zoom=12, maptype = 'roadmap',source = 'google',color = 'color')
 
-#ggmap(map_m)
-#ggmap(map_q)
-#ggmap(map_bx)
-#ggmap(map_bl)
-#ggmap(map_s)
-```
-
-```{r}
 data_m = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="MANHATTAN")
 
-ggmap(map_m) + stat_density2d(
+plot_m <- ggmap(map_m) + stat_density2d(
     aes(x = data_m$LONGITUDE, y = data_m$LATITUDE, fill = ..level.., alpha = 1),
     size = 0.001, bins = 100, data = data_m,
     geom = "polygon"
-  ) + scale_fill_viridis_c() #+ facet_wrap(~YEAR)
+  ) + scale_fill_viridis_c() +
+      labs(x='Longitude',
+           y='Latitude') + theme_minimal()
 
 
 
 data_q = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="QUEENS")
 
-ggmap(map_q) + stat_density2d(
+plot_q <- ggmap(map_q) + stat_density2d(
     aes(x = data_q$LONGITUDE, y = data_q$LATITUDE, fill = ..level.., alpha = 1),
     size = 0.001, bins = 100, data = data_q,
     geom = "polygon"
-  ) + scale_fill_viridis_c() #+ facet_wrap(~YEAR)
+  ) + scale_fill_viridis_c()+
+      labs(x='Longitude',
+           y='Latitude') + theme_minimal()
 
 
 
 data_bx = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="BRONX")
 
-ggmap(map_bx) + stat_density2d(
+plot_bx <- ggmap(map_bx) + stat_density2d(
     aes(x = data_bx$LONGITUDE, y = data_bx$LATITUDE, fill = ..level.., alpha = 1),
     size = 0.001, bins = 100, data = data_bx,
     geom = "polygon"
-  ) + scale_fill_viridis_c()# + facet_wrap(~YEAR)
+  ) + scale_fill_viridis_c() +
+      labs(x='Longitude',
+           y='Latitude') + theme_minimal()
 
 
 
 data_bl = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="BROOKLYN")
 
-ggmap(map_bl) + stat_density2d(
+plot_bl <- ggmap(map_bl) + stat_density2d(
     aes(x = data_bl$LONGITUDE, y = data_bl$LATITUDE, fill = ..level.., alpha = 1),
     size = 0.001, bins = 100, data = data_bl,
     geom = "polygon"
-  ) + scale_fill_viridis_c() #+ facet_wrap(~YEAR)
+  ) + scale_fill_viridis_c() +
+      labs(x='Longitude',
+           y='Latitude') + theme_minimal()
 
 
 
 data_s = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="STATEN ISLAND")
 
-ggmap(map_s) + stat_density2d(
+plot_s <- ggmap(map_s) + stat_density2d(
     aes(x = data_s$LONGITUDE, y = data_s$LATITUDE, fill = ..level.., alpha = 1),
     size = 0.001, bins = 100, data = data_s,
     geom = "polygon"
-  ) + scale_fill_viridis_c() #+ facet_wrap(~YEAR)
-
-
-#m_map = ggmap(map, base_layer = ggplot(aes(x = data_m$LONGITUDE, y = data_m$LATITUDE), data = data_m))
-
-#ggmap(map) + ggplot(data_m, aes(x=data_m$LONGITUDE, y=data_m$LATITUDE)) + geom_bin2d(bins=100)
-
-#m_map + stat_density2d(aes(x = data_m$LONGITUDE, y = data_m$LATITUDE, fill = ..level.., alpha = ..level..),
-#    bins = 20, geom = "polygon",
-#data = data_m)
+  ) + scale_fill_viridis_c() +
+      labs(x='Longitude',
+           y='Latitude') + theme_minimal()
 ```
 
-# NO
-```{r}
-data_m_killed = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="MANHATTAN" & data$`NUMBER OF PERSONS KILLED` != 0 & !is.na(data$`NUMBER OF PERSONS KILLED`))
-
-data_m_killed_expanded = expandRows(data_m_killed, "NUMBER OF PERSONS KILLED")
-
-tally_result= data_m_killed %>% group_by(data_m_killed$'NUMBER OF PERSONS KILLED') %>% tally()
-
-ggmap(map) + stat_density2d(
-    aes(x = data_m_killed_expanded$LONGITUDE, y = data_m_killed_expanded$LATITUDE, fill = ..level.. , alpha = 1),
-    size = 0.0001, bins = 30, data = data_m_killed_expanded,
-    geom = "polygon"
-  ) + scale_fill_viridis_c()
-
-#m_map = ggmap(map, base_layer = ggplot(aes(x = data_m$LONGITUDE, y = data_m$LATITUDE), data = data_m))
-
-#ggmap(map) + ggplot(data_m, aes(x=data_m$LONGITUDE, y=data_m$LATITUDE)) + geom_bin2d(bins=100)
-
-#m_map + stat_density2d(aes(x = data_m$LONGITUDE, y = data_m$LATITUDE, fill = ..level.., alpha = ..level..),
-#    bins = 20, geom = "polygon",
-#data = data_m)
+```{r fig.keep='all', message=FALSE, warning=FALSE, results='hide', echo=FALSE}
+ggarrange(plot_m, plot_q, plot_bx, plot_bl, plot_s, ncol=2, labels = c("Manhattan", "Queens", "Bronx", "Brooklyn", "Staten Island"))
 ```
 
 
-
-```{r}
-#ggplot(data=data_m, aes(x=data_m$LONGITUDE, y=data_m$LATITUDE)) + geom_point(aes(alpha=.000000001)) 
-```
-
-# Boxplots 
-
-```{r}
-#ggplot(subset(data, !is.na(data$BOROUGH)), aes(y = `NUMBER OF PERSONS KILLED`)) + geom_boxplot()
-#ggplot(subset(data, !is.na(data$BOROUGH)), aes(y = `NUMBER OF PERSONS INJURED`)) + geom_boxplot()
-
-data %>% 
-  select(`NUMBER OF CYCLIST INJURED`, `NUMBER OF PEDESTRIANS INJURED`,`NUMBER OF MOTORIST INJURED`, `NUMBER OF CYCLIST KILLED`, `NUMBER OF PEDESTRIANS KILLED`, `NUMBER OF MOTORIST KILLED`) %>% 
-  gather("key", "value") %>% 
-  ggplot(aes(x=key, y=value)) + geom_boxplot() +coord_flip()
-```
-# car rams times sq: 5/18/17 - 27
-# BUS ACCIDENT: 9/9/2013 - 43
-
-
-```{r}
-clean_data <- data
-clean_data[is.na(clean_data)] <- 0
-
-kill_inj <- clean_data %>% 
-  select(YEAR, `NUMBER OF PERSONS KILLED`, `NUMBER OF PERSONS INJURED`) %>% 
-  group_by(YEAR) %>%  summarise_each(funs(sum)) %>% 
-  gather("key","value",-YEAR)
-kill_inj
-library(ggplot2)
-ggplot(kill_inj) + geom_bar(aes(x=YEAR,y=value,fill=key),position="dodge",stat="identity") + facet_wrap(.~key, scales = "free")
-```
-
-```{r}
-clean_data <- data
-clean_data[is.na(clean_data)] <- 0
-kill_inj <- clean_data %>% 
-  select(YEAR, `NUMBER OF PERSONS KILLED`, `NUMBER OF PERSONS INJURED`) %>% 
-  group_by(YEAR) %>% mutate(total=1) %>% summarise_each(funs(sum)) %>% 
-  mutate(prop_killed =  `NUMBER OF PERSONS KILLED`/total, prop_injured =  `NUMBER OF PERSONS INJURED`/total) %>% 
-  select(YEAR, `prop_killed`, `prop_injured`) %>% 
-  gather("key","value",-YEAR)
-kill_inj
-library(ggplot2)
-ggplot(kill_inj) + geom_bar(aes(x=YEAR,y=value,fill=key),position="dodge",stat="identity") + facet_wrap(.~key, scales = "free")
-```
-
-
-```{r}
-data <- subset(data, !is.na(data$BOROUGH))
-temp2 <- data %>%
+```{r message=FALSE, warning=FALSE}
+data_subset <- subset(data, !is.na(data$BOROUGH))
+temp2 <- data_subset %>%
   group_by(BOROUGH)%>%
   summarize(Total = n()/1000)%>%
   mutate(BOROUGH = fct_reorder(BOROUGH, Total, .desc = TRUE))
 
 
 ggplot(temp2, aes(BOROUGH,Total))+
-geom_bar( stat = "identity", width = 0.5)+
+geom_bar( stat = "identity", width = 0.4, fill = "orange", color = "black")+
   xlab("Borough")+
-    ylab("No. of Accidents (In Thousands)")+
-    ggtitle("Boroughwise Accidents in NY from 2012-present")+theme_light()
+    ylab("Number of Accidents (In Thousands)")+
+    ggtitle("Borough-wise Accidents in NY from 2012-2019")+theme_minimal()
 
 ```
+
 
 
 
 I'm going to manually create a list of the areas of the five boroughs, I could scrape it using rvest, but I feel its too much of an effort for just getting five values, so I prefer manual entries in this case. Source : https://en.wikipedia.org/wiki/Boroughs_of_New_York_City
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 #Areas in Square miles arranged according to ascending order of Borough Name, Just as in temp2.
 Area = c(42.10,70.82,22.83,108.53,58.37)
 temp2 <- cbind(temp2, Area)
-```
 
-```{r}
-
-temp2 <- temp2 %>% 
+temp2 <- temp2 %>%
             mutate(accident_density = Total/Area) %>%
             mutate(BOROUGH = fct_reorder(BOROUGH, accident_density, .desc = TRUE))
 
 ggplot(temp2, aes(BOROUGH, accident_density))+
-geom_bar( stat = "identity", width = 0.5)+
+geom_bar( stat = "identity", width = 0.4, , fill = "orange", color = "black")+
   xlab("Borough")+
-    ylab("No. of Accidents/ Area")+
-    ggtitle("Boroughwise Accident-Density in NY from 2012-present")+theme_light()
+    ylab("Number of Accidents/ Area")+
+    ggtitle("Borough-wise Accident Density in NY from 2012-2019")+theme_minimal()
 ```
 
 And yeah, what we saw was correct. Manhattan has over twice the no. of accident-density(i.e. No. of accidents/Area of the Borough) than the next highest, which is Brooklyn.
 
-
-#Accidents by year and borough 
-```{r}
-ggplot(data,aes(x=YEAR,fill=BOROUGH )) +
-      geom_bar( position='dodge', width=0.9) +
+```{r message=FALSE, warning=FALSE}
+ggplot(data_subset,aes(x=YEAR,fill=BOROUGH )) +
+      geom_bar( position='dodge', width=0.9, color="black") +
   scale_x_continuous(breaks = c(2012, 2013,2014,2015,2016,2017,2018,2019) ) +
   xlab("Borough")+
-    ylab("No. of Accidents")+
-    ggtitle("Boroughwise Accidents in NY from 2012-present")+theme_minimal()
+    ylab("Number of Accidents")+
+    ggtitle("Borough-wise Accidents in NY from 2012-2019")+theme_minimal() + scale_fill_brewer(palette = "Set2")
 ```
 
 
-# Collisions by month  
-```{r}
-ggplot(data) +
-      geom_freqpoly(aes(x=MONTH, color=BOROUGH), bins=12) +
-      labs(title='Collisions by Month', 
-           x=NULL, 
-           y='Collisions')+ 
-      scale_x_continuous(limits = c(1, 12), breaks = 1:12, 
+
+
+```{r message=FALSE, warning=FALSE}
+month_data <- data_subset %>% 
+  select(MONTH, BOROUGH) %>% 
+  group_by(MONTH, BOROUGH) %>% 
+  summarize(total = n())
+
+month_bw <- data_subset %>% 
+  group_by(BOROUGH) %>% summarise(total = n())
+
+new <- merge(month_data, month_bw , by="BOROUGH" , all.x = TRUE) %>% mutate(total = total.x/total.y )
+
+
+ggplot(new,aes(x=MONTH,y=total,group=BOROUGH, colour = BOROUGH)) + geom_point() + geom_line() +
+      labs(title='Borough-wise Monthly Proportion of Accidents',
+           x='Months',
+           y='Proportion of Accidents')+
+  scale_x_continuous(limits = c(1, 12), breaks = 1:12,
                          labels=c("Jan","Feb","Mar","Apr","May","Jun",
-                                  "Jul","Aug","Sep","Oct","Nov","Dec")) 
-      
+                                  "Jul","Aug","Sep","Oct","Nov","Dec"))+
+  scale_y_continuous(limits = c(0, 0.12), breaks=c(0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12)) +
+  theme_minimal() 
 ```
 
-#Causes & Vehicles
- 
-```{r}
-df_cause <- data %>%
+
+
+```{r message=FALSE, warning=FALSE}
+bw <- data_subset %>% select(`ACCIDENT TIME`, BOROUGH) %>% mutate(TIME = as.POSIXct(`ACCIDENT TIME`, format = "%H"))%>% mutate(TIME = strftime(TIME, format="%H")) %>% group_by(BOROUGH) %>% summarise(total = n())
+
+time <- data_subset %>% select(`ACCIDENT TIME`, BOROUGH) %>% mutate(TIME = as.POSIXct(`ACCIDENT TIME`, format = "%H"))%>% mutate(TIME = strftime(TIME, format="%H")) %>% group_by(TIME, BOROUGH) %>% summarise(total = n())
+
+new <- merge(time,bw , by="BOROUGH" , all.x = TRUE) %>% mutate(total = total.x/total.y )
+
+ggplot(new,aes(x=TIME,y=total,group=BOROUGH, colour = BOROUGH)) + geom_point() + geom_line() +
+      labs(title='Borough-wise Hourly Proportion of Accidents',
+           x='Hour of the day',
+           y='Proportion of Accidents')+
+      theme_classic()
+
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+data %>%
+  select(`NUMBER OF CYCLIST INJURED`, `NUMBER OF PEDESTRIANS INJURED`,`NUMBER OF MOTORIST INJURED`, `NUMBER OF CYCLIST KILLED`, `NUMBER OF PEDESTRIANS KILLED`, `NUMBER OF MOTORIST KILLED`) %>% 
+  gather("key", "value") %>%
+  mutate(`Killed / Injured` = ifelse(endsWith(key, "KILLED"), "Killed", "Injured")) %>% 
+  ggplot(aes(x=key, y=value, color=`Killed / Injured`)) + geom_boxplot() +coord_flip() + theme_minimal() +
+      labs(title = "Boxplot of Number of Cyclists/Pedestrians/Motorists Killed or Injured ", 
+           y='Count',
+           x='')
+```
+# car rams times sq: 5/18/17 - 27
+# BUS ACCIDENT: 9/9/2013 - 43
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+stackeddata <- data_subset %>%
+  select(`NUMBER OF PEDESTRIANS INJURED`,`NUMBER OF PEDESTRIANS KILLED`, `NUMBER OF CYCLIST INJURED`, `NUMBER OF CYCLIST KILLED`, `NUMBER OF MOTORIST INJURED`,`NUMBER OF MOTORIST KILLED`,BOROUGH)
+stackeddata[is.na(stackeddata)] <- 0
+stackeddata<- stackeddata %>%
+  group_by(BOROUGH) %>%
+  summarize_each(funs(sum)) %>%
+  gather(`Victim Types`,"value",-BOROUGH)
+
+# stackeddata<- data %>% group_by("BOROUGH") %>% summarize_each(funs(sum))
+ggplot(stackeddata,aes(x= stackeddata$BOROUGH,y=stackeddata$value,fill=`Victim Types`)) + 
+  geom_col()+
+  xlab("Borough")+
+    ylab("Count")+
+    ggtitle("Borough-wise Number of Victim Types")+theme_minimal() + scale_fill_brewer(palette = "Set2")
+```
+
+```{r message=FALSE, warning=FALSE}
+head(arrange(stackeddata, value))
+```
+
+```{r message=FALSE, warning=FALSE}
+tail(arrange(stackeddata, value))
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+# No. of accidents that led to deaths.
+lethal_collisions = data_subset %>%
+  mutate(Deaths = `NUMBER OF PERSONS KILLED`+ `NUMBER OF CYCLIST KILLED` + `NUMBER OF PEDESTRIANS KILLED`+ `NUMBER OF MOTORIST KILLED`)%>%
+  filter(Deaths > 0)%>%
+  mutate(BOROUGH = fct_reorder(BOROUGH, Deaths, .desc = TRUE))
+
+#Accidents by Borough
+count_collisions_by_borough = data_subset %>%
+  group_by(BOROUGH) %>%
+  summarise(accidents = n())%>%
+  mutate(BOROUGH = fct_reorder(BOROUGH, accidents, .desc = TRUE))
+
+# Lethal Accidents by Borough
+count_lethal_collisions_by_borough = lethal_collisions %>%
+  group_by(BOROUGH) %>%
+  summarise(lethal_accidents = n())%>%
+  mutate(BOROUGH = fct_reorder(BOROUGH, lethal_accidents, .desc = TRUE))
+
+how_lethal = inner_join(count_collisions_by_borough, count_lethal_collisions_by_borough, by='BOROUGH')
+
+how_lethal$percent_lethal = how_lethal$lethal_accidents *100 / how_lethal$accidents
+ggplot(how_lethal,aes(x = fct_reorder(BOROUGH,lethal_accidents,.desc = TRUE), y = lethal_accidents/1000))+
+  geom_bar(stat='identity', color = "black", fill = "orange", width = 0.4)+
+  xlab("Borough")+
+    ylab("Proportion")+
+    ggtitle("Proportion of Accidents Causing Deaths from 2012-2019")+theme_minimal()+scale_fill_brewer(palette = "Set2")
+```
+
+
+
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+clean_data <- data
+clean_data[is.na(clean_data)] <- 0
+
+kill_inj <- clean_data %>%
+  select(YEAR, `NUMBER OF PERSONS KILLED`, `NUMBER OF PERSONS INJURED`) %>%
+  group_by(YEAR) %>%  summarise_each(funs(sum)) %>%
+  gather("key","value",-YEAR)
+
+ggplot(kill_inj) + geom_bar(aes(x=YEAR,y=value,fill=key),position="dodge",stat="identity") + facet_wrap(.~key, scales = "free", ncol = 1) + scale_x_continuous(breaks = c(2012:2019))+ scale_fill_brewer(palette = "Set2")+
+  xlab("Year")+
+    ylab("Count")+
+    ggtitle("Number of People Killed/Injured in Accidents from 2012-2019")+theme_minimal()
+```
+
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+df_cause <- data_subset %>%
   select(BOROUGH, `CONTRIBUTING FACTOR VEHICLE 1`, `CONTRIBUTING FACTOR VEHICLE 2`, `CONTRIBUTING FACTOR VEHICLE 3`, `CONTRIBUTING FACTOR VEHICLE 4`, `CONTRIBUTING FACTOR VEHICLE 5`) %>%
-      gather(., key='key', value='cause', 
-             `CONTRIBUTING FACTOR VEHICLE 1`, `CONTRIBUTING FACTOR VEHICLE 2`, `CONTRIBUTING FACTOR VEHICLE 3`, `CONTRIBUTING FACTOR VEHICLE 4`, `CONTRIBUTING FACTOR VEHICLE 5`) %>% 
+      gather(., key='key', value='cause',
+             `CONTRIBUTING FACTOR VEHICLE 1`, `CONTRIBUTING FACTOR VEHICLE 2`, `CONTRIBUTING FACTOR VEHICLE 3`, `CONTRIBUTING FACTOR VEHICLE 4`, `CONTRIBUTING FACTOR VEHICLE 5`) %>%
       # filtering out missing and most common, general, uninformative records:
-      filter(!(cause %in% c('', 
-                            'Unspecified', 
+      filter(!(cause %in% c('',
+                            'Unspecified',
                             'Driver Inattention/Distraction',
                             'Other Vehicular',
-                            'Failure to Yield Right-of-Way'))) 
-```
+                            'Failure to Yield Right-of-Way')))
 
-```{r}
 # find and select top 20 causes overall:
   df_cause_top <- df_cause %>%
       group_by(cause) %>%
       summarise(count=n()) %>%
       top_n(20, count)
-```
 
-
-# Collision causes bar chart 
-```{r}
 df <- df_cause_top %>%
       filter(!is.na(cause))%>%
       mutate(cause_z = round((count - min(count))/(max(count)-min(count)), 4),
-             cause_type = ifelse(cause_z < 0, 'below', 'above')) 
+             cause_type = ifelse(cause_z < 0, 'below', 'above'))
 
  ggplot(data = df) +
-      geom_bar(aes(x=reorder(cause, cause_z), y=cause_z, fill=cause_type), 
-               width=0.5, stat='identity', show.legend = F) +
+      geom_bar(aes(x=reorder(cause, cause_z), y=cause_z),
+               width=0.5, stat='identity', show.legend = F, fill="orange", color="black") +
       coord_flip() +
-      labs(title='Collisions by Causes',
-           x='Top 20 Collision Causes',
-           y='Standardized Counts') +
-      theme_classic()
+      labs(title='Top 20 Causes for Accidents',
+           x='',
+           y='Normailized Counts') +
+      theme_minimal() 
 ```
 
 
-#plot top 20 causes freq graph for each borough
-```{r}
-    # use top 20 causes to filter original table with borough column: 
-    df_top <- df_cause_top%>% 
-      arrange(count) 
-    
+
+
+
+```{r message=FALSE, warning=FALSE}
+    # use top 20 causes to filter original table with borough column:
+    df_top <- df_cause_top%>%
+      arrange(count)
+
     df <- df_cause%>%
       filter(!is.na(cause))%>%
       # use top 20 overall result to filter the original table:
       semi_join(., df_top, by='cause') %>%
       group_by(BOROUGH, cause) %>%
       summarise(count=n()) %>%
-      mutate(cause = factor(cause, levels=df_top$cause)) 
-    
+      mutate(cause = factor(cause, levels=df_top$cause))
+
     df_boro_tot <- df %>%
       group_by(BOROUGH) %>%
       summarise(total = sum(count))
-    
+
       # calculate ratio for percentage axis display:
     df <- df %>%
       left_join(., df_boro_tot, by='BOROUGH') %>%
       mutate(ratio = format(round(count / total, 1), nsmall = 3)) %>%
-      select( -total) 
-    
-  ##BARCHART for Collisions By Causes  
-    # ggplot(data = df) +
-    #   geom_bar(aes(x=cause, y=ratio, fill=BOROUGH), 
-    #            width=0.5, stat='identity', show.legend = F) +
-    #   coord_flip() +
-    #   facet_grid(.~BOROUGH) +
-    #   labs(title='Collisions by Causes',
-    #        x='Top 20 Collision Causes',
-    #        y=NULL) + 
-    #   scale_fill_brewer(palette = 'Set1')+
-    #   theme_classic()
+      select( -total)
+
  theme_dotplot <- theme_bw(14) +
     theme(axis.text.y = element_text(size = rel(.75)),
         axis.ticks.y = element_blank(),
@@ -313,27 +332,26 @@ df <- df_cause_top %>%
         panel.grid.major.x = element_blank(),
         panel.grid.major.y = element_line(size = 0.5),
         panel.grid.minor.x = element_blank())
-    
-   
-```
 
 
-```{r}
- ggplot(df, 
+ ggplot(df,
        aes(count, fct_reorder2(cause, BOROUGH, count,  .desc = FALSE),
            color = BOROUGH)) +
-  geom_point() + 
+  geom_point() +
   theme_dotplot+
-      labs(title='Boroughwise Collisions by Causes',
-           y='Top 20 Collision Causes',
-           x=NULL) 
+      labs(title='Borough-wise Causes for Accidents',
+           y='',
+           x='Count') + theme_minimal() + scale_fill_brewer(palette = "Set2")
 ```
 
-#Vehicle type
-```{r}
-df_vehicle <- data %>% 
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+df_vehicle <- data_subset %>%
       select(BOROUGH, `VEHICLE TYPE CODE 1`, `VEHICLE TYPE CODE 2`, `VEHICLE TYPE CODE 3`, `VEHICLE TYPE CODE 4`, `VEHICLE TYPE CODE 5`) %>%
-      gather(., key='key', value='vehicle', 
+      gather(., key='key', value='vehicle',
              `VEHICLE TYPE CODE 1`, `VEHICLE TYPE CODE 2`, `VEHICLE TYPE CODE 3`, `VEHICLE TYPE CODE 4`, `VEHICLE TYPE CODE 5`) %>%
       mutate(vehicle = tolower(vehicle)) %>%
       mutate(vehicle = ifelse(vehicle == 'uliti', 'utili',         vehicle)) %>%
@@ -346,49 +364,48 @@ df_vehicle <- data %>%
       filter(! (vehicle %in% c('n/a', '',
                                'unknown','unkno','unk', 'other',
                                'passenger vehicle', 'sport utility / station wagon')))
-```
 
-```{r}
   df_vehicle_top <- df_vehicle %>%
       filter(!is.na(vehicle))%>%
       group_by(vehicle) %>%
       summarise(count=n()) %>%
       top_n(20, count)
-  
-```
 
 
-```{r}
 df_top <- df_vehicle_top%>%
       mutate(vehicle_z = round((count - min(count))/(max(count)-min(count)), 4),
              vehicle_type = ifelse(vehicle_z < 0, 'below', 'above')) %>%
       mutate(vehicle = tools::toTitleCase(vehicle))
-    
+
     ggplot(data = df_top) +
       geom_bar(aes(x=reorder(vehicle, vehicle_z), y=vehicle_z,
                    fill=vehicle_type),
-               width=0.5, stat='identity', show.legend = F) +
+               width=0.5, stat='identity', show.legend = F, color="black", fill="orange") +
       coord_flip() +
-      labs(title='Collisions by Types of Vehicles',
-           x='Top 20 Collision Vehicles',
-           y='Scaled Count (Max-Min)')+
-      theme_classic() 
+      labs(title='Accidents by Type of Vehicles Involved',
+           x='Type of Vehicle',
+           y='Normalized Count')+
+      theme_minimal()
 ```
 
-#
+
+
+
+
+
 
 Let's see the most accident-prone places in terms of no. of Accidents. Since, the data specifies that the police officer usually notes down the closest intersection of street and avenue, it would be logical to find out the  most accident-prone places based on these parameters, and I think this is the best approximation that we can get given the data.
 
 I'm first going to find out the 25 most accident-prone Intersections.
-```{r}
-dangerous_places <- data%>%
+```{r message=FALSE, warning=FALSE}
+dangerous_places <- data_subset %>%
   filter(!is.na(`CROSS STREET NAME`) & !is.na(`ON STREET NAME`)) %>%
   group_by(LATITUDE,LONGITUDE, place = paste(`ON STREET NAME`,`CROSS STREET NAME`))%>%
   summarize(count = n())%>%
   arrange(desc(count))%>%
   head(25)
 
-dangerous_places$Rank <- order(dangerous_places$count, decreasing = T) 
+dangerous_places$Rank <- order(dangerous_places$count, decreasing = T)
 
 dangerous_places$label <- paste(dangerous_places$Rank, dangerous_places$place, sep=". ")
 ```
@@ -396,7 +413,7 @@ dangerous_places$label <- paste(dangerous_places$Rank, dangerous_places$place, s
 
 I'm going to try and mark these places on the map, ordered in the format (`Rank`. `Cross Street Name`).
 
-```{r,fig.height=7, fig.width=7}
+```{r message=FALSE, warning=FALSE}
 
 temp = data_sample%>%
   select(LATITUDE,LONGITUDE,BOROUGH)
@@ -405,50 +422,49 @@ zoomed_p =  ggmap(get_googlemap(center = c(Longitude= -73.995249, Latitude = 40.
                     zoom = 12, scale = 2,
                     maptype ='terrain',
                     color = 'color'))
-zoomed_p + geom_point(aes(x = LONGITUDE, y = LATITUDE, colour = BOROUGH), data = temp, alpha=0.2, size = 0.3) + 
-  theme(legend.position="bottom")  +
-  geom_point(aes(x = LONGITUDE, y = LATITUDE, stroke = 2), colour="red", data = dangerous_places, size =1) + 
+zoomed_p + #geom_point(aes(x = LONGITUDE, y = LATITUDE), data = temp, alpha=0.2, size = 0.3) +
+  geom_point(aes(x = LONGITUDE, y = LATITUDE, stroke = 2), colour="red", data = dangerous_places, size =1) +
   geom_label_repel(
     aes(LONGITUDE, LATITUDE, label = label),
     data=dangerous_places,
-    family = 'Times', 
-    size = 5, 
+    family = 'Times',
+    size = 3,
     box.padding = 0.2, point.padding = 0.5,
-    segment.color = 'grey50') + 
+    segment.color = 'grey50') +
     xlab("Longitude")+
     ylab("Latitude")+
-    ggtitle("25 most accident-prone Cross-streets")+
-  theme(legend.position="none")
+    ggtitle("25 Most Accident-Prone Cross-streets")+
+  theme_minimal()
 ```
 
 Straight off the bat, its clearly visible that Staten Island has no cross-street within the 25 most accident-prone intersections. Another interesting observation is that clusters are seen in this graph, especially in Manhattan, wherein very specific regions have such a high no. of accidents reported. Surprisingly, 2nd Avenue appears 5 times in this top 25 list, and particularly in a two specifically clustered regions, once in the (34th St. and 36th St. Cluster) and once in the (57th St and 59th St. Cluster). Also, Flatbush Avenue shows a similar trend, having a cluster of intersections that appear twice in the top 10. These are far too interesting observations to not dig deeper into, so I'm going to do exactly that, and hopefully find out the reason for this.
 
 I'm going to zoom in on the clusters in Manhattan, specifically on the four intersections i.e. 2nd and 3rd Avenue across 57-59th streets.
 
-```{r,fig.height=7, fig.width=7}
+```{r message=FALSE, warning=FALSE}
 zoomed_p =  ggmap(get_googlemap(center = c(Longitude= -73.9675069, Latitude = 40.7601883),
                     zoom = 15, scale = 2,
                     maptype ='terrain',
                     color = 'color'))
-zoomed_p + geom_point(aes(x = LONGITUDE, y = LATITUDE, colour = BOROUGH), data = temp, alpha=0.2, size = 0.3) + 
-  theme(legend.position="bottom")  +
-  geom_point(aes(x = LONGITUDE, y = LATITUDE, stroke = 2), colour="red", data = dangerous_places, size =1) + 
+zoomed_p +# geom_point(aes(x = LONGITUDE, y = LATITUDE, colour = BOROUGH), data = temp, alpha=0.2, size = 0.3) +
+  geom_point(aes(x = LONGITUDE, y = LATITUDE, stroke = 2), colour="red", data = dangerous_places, size =1) +
   geom_label_repel(
     aes(LONGITUDE, LATITUDE, label = label),
     data=dangerous_places,
-    family = 'Times', 
-    size = 5, 
+    family = 'Times',
+    size = 3,
     box.padding = 0.2, point.padding = 0.5,
-    segment.color = 'grey50') + 
+    segment.color = 'grey50') +
     xlab("Longitude")+
     ylab("Latitude")+
-    ggtitle("Accident-prone Intersections in Manhattan")+
-  theme(legend.position="none")
+    ggtitle("Investigating Cluster of Accident-Prone Intersections in Manhattan (Mid-Town)")+
+    theme_minimal()
+
 ```
 
 Let's see what else we can find out about these 4 intersections.
-```{r}
-dangerous_places_combined <- merge(x = dangerous_places, y = data, by=c("LATITUDE", "LONGITUDE"), all.x=TRUE)
+```{r message=FALSE, warning=FALSE}
+dangerous_places_combined <- merge(x = dangerous_places, y = data_subset, by=c("LATITUDE", "LONGITUDE"), all.x=TRUE)
 ```
 
 
@@ -459,106 +475,40 @@ dangerous_places_combined <- merge(x = dangerous_places, y = data, by=c("LATITUD
 ***********************************************************************************
 ***********************************************************************************
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 intersection_ranks = c(2,4,5,12)
   dangerous_places_combined %>%
   filter(Rank %in% intersection_ranks) %>%
   group_by(Rank, place, YEAR)%>%
-  summarize(pedestrian_injuries = sum(`NUMBER OF PEDESTRIANS INJURED`), cyclist_injuries = sum(`NUMBER OF CYCLIST INJURED`), motorist_injuries = sum(`NUMBER OF MOTORIST INJURED`))%>%
-  ungroup()%>% 
-  gather(key,value,-place,-Rank, -YEAR) %>% 
-    mutate(place = fct_reorder(place, value, .desc = TRUE)) %>% 
-  ggplot( aes(x=place, y = value, fill=key )) +
+  summarize(`Pedestrian Injuries` = sum(`NUMBER OF PEDESTRIANS INJURED`), `Cyclist Injuries` = sum(`NUMBER OF CYCLIST INJURED`), `Motorist Injuries` = sum(`NUMBER OF MOTORIST INJURED`))%>%
+  ungroup()%>%
+  gather(`Injured People`,value,-place,-Rank, -YEAR) %>%
+    mutate(place = fct_reorder(place, value, .desc = TRUE)) %>%
+  ggplot( aes(x=place, y = value, fill=`Injured People` )) +
   geom_bar(stat = "identity", position='dodge', width=0.9)+
-  #scale_x_continuous(breaks = c(2012, 2013,2014,2015,2016,2017,2018,2019) )
-  xlab("Borough")+
+  xlab("Intersection")+
     coord_flip()+
     facet_wrap(.~YEAR)+
-    ylab("No. of Accidents")+
-    ggtitle("Boroughwise Accidents in NY from 2012-present")
+    ylab("Counts of Injuries")+
+    ggtitle("Injuries at the Cluster Under Investigation from 2012-2019")
 
 ```
 
 
-***********************************************************************************
-***********************************************************************************
-***********************************************************************************
-***********************************************************************************
-***********************************************************************************
-
-
-
-```{r}
-stackeddata <- data %>%
-  select(`NUMBER OF PERSONS INJURED`,`NUMBER OF PERSONS KILLED`,`NUMBER OF PEDESTRIANS INJURED`,`NUMBER OF PEDESTRIANS KILLED`, `NUMBER OF CYCLIST INJURED`, `NUMBER OF CYCLIST KILLED`, `NUMBER OF MOTORIST INJURED`,`NUMBER OF MOTORIST KILLED`,BOROUGH)
-stackeddata[is.na(stackeddata)] <- 0
-stackeddata<- stackeddata %>%
-  group_by(BOROUGH) %>%
-  summarize_each(funs(sum)) %>%
-  gather("key","value",-BOROUGH)
-
-
-
-# stackeddata<- data %>% group_by("BOROUGH") %>% summarize_each(funs(sum))
-ggplot(stackeddata,aes(x= stackeddata$BOROUGH,y=stackeddata$value,fill=stackeddata$key)) + geom_col()
-  
-```
-
-
-
-
-```{r}
-time <- data %>% select(`ACCIDENT TIME`, BOROUGH) %>% mutate(TIME = as.POSIXct(`ACCIDENT TIME`, format = "%H"))%>% mutate(TIME = strftime(TIME, format="%H")) %>% group_by(TIME, BOROUGH) %>% summarise(total = n())
-ggplot(time,aes(x=TIME,y=total,group=BOROUGH, colour = BOROUGH)) + geom_point() + geom_line() +
-      labs(title='Hourly distribution of Accidents',
-           x='Hour',
-           y='Count')+
-      theme_classic() 
-```
-
-
-```{r}
-# No. of accidents that led to deaths.
-lethal_collisions = data %>% 
-  mutate(Deaths = `NUMBER OF PERSONS KILLED`+ `NUMBER OF CYCLIST KILLED` + `NUMBER OF PEDESTRIANS KILLED`+ `NUMBER OF MOTORIST KILLED`)%>%
-  filter(Deaths > 0)%>%
-  mutate(BOROUGH = fct_reorder(BOROUGH, Deaths, .desc = TRUE))
-
-#Accidents by Borough
-count_collisions_by_borough = data %>%
-  group_by(BOROUGH) %>%
-  summarise(accidents = n())%>%
-  mutate(BOROUGH = fct_reorder(BOROUGH, accidents, .desc = TRUE))
-
-# Lethal Accidents by Borough
-count_lethal_collisions_by_borough = lethal_collisions %>%
-  group_by(BOROUGH) %>%
-  summarise(lethal_accidents = n())%>%
-  mutate(BOROUGH = fct_reorder(BOROUGH, lethal_accidents, .desc = TRUE))
-
-```
-
-
-```{r}
-how_lethal = inner_join(count_collisions_by_borough, count_lethal_collisions_by_borough, by='BOROUGH')
-
-how_lethal$percent_lethal = how_lethal$lethal_accidents *100 / how_lethal$accidents
-ggplot(how_lethal,aes(x = fct_reorder(BOROUGH,lethal_accidents,.desc = TRUE), y = lethal_accidents/1000))+
-  geom_bar(stat='identity')+
-  xlab("Borough")+
-    ylab("Lethal Accidents (In 1000's)")+
-    ggtitle("Boroughwise lethal accidents in NY from 2012-present")+theme_light()
-```
-
-```{r}
-how_lethal = how_lethal %>%
-  mutate(BOROUGH = fct_reorder(BOROUGH, percent_lethal, .desc = TRUE))
-mysample <- data[sample(1:nrow(data), 500,
-   replace=FALSE),]
-
-ggplot(how_lethal, aes(x = fct_reorder(BOROUGH,percent_lethal,.desc=TRUE), y = percent_lethal))+
-  geom_bar(stat='identity', width = 0.6)+
-  xlab("Borough")+
-    ylab("Lethal Accidents Percent")+
-    ggtitle("Boroughwise lethal accidents in NY from 2012-present")+theme_light()
+```{r message=FALSE, warning=FALSE}
+intersection_ranks = c(2,4,5,12)
+  dangerous_places_combined %>%
+  filter(Rank %in% intersection_ranks) %>%
+  group_by(Rank, place, YEAR)%>%
+  summarize(`Pedestrian Killed` = sum(`NUMBER OF PEDESTRIANS KILLED`), `Cyclist Killed` = sum(`NUMBER OF CYCLIST KILLED`), `Motorist Killed` = sum(`NUMBER OF MOTORIST KILLED`))%>%
+  ungroup()%>%
+  gather(`Killed People`,value,-place,-Rank, -YEAR) %>%
+    mutate(place = fct_reorder(place, value, .desc = TRUE)) %>%
+  ggplot( aes(x=place, y = value, fill=`Killed People` )) +
+  geom_bar(stat = "identity", position='dodge', width=0.9)+
+  xlab("Intersection")+
+    coord_flip()+
+    ylab("Counts of Deaths")+
+    ggtitle("Deaths at the Cluster Under Investigation from 2012-2019") +
+    scale_y_continuous(limits = c(0,5))
 ```
