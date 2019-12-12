@@ -1,23 +1,42 @@
-# Missing values
+# Missing Value Analysis
+
+## Why analyse missing values?
 In this section, we will try to analyse trends in missing values of the datset. It is important to analyse missing values' trends as they might tell something about the question we are trying to investigate, and also to see if we will be able to investigate the questions under consideration. If the data required for investigation is missing, we will have to take the help of external data sources. In other words, inspecting the trends among missing values will give a direction to our investigation. 
 
-First we will import all the required libraries which will help us in the analysis of missing values.
+## Visual representation of missing values in dataset
 
-
-# borough missing get lat long to get borough - which borough is generally missing
-
-
-Here, we are starting by analysing the missing values of the whole dataset.
 ```{r message=FALSE, warning=FALSE}
-# full data
 full_data <- missing_data[, -c(30, 31, 32)]
-gg_miss_upset(full_data,  nsets = 16)
+
+vis_miss(full_data, sort_miss = TRUE, warn_large_data = FALSE) + 
+  labs(title = "Missing Data Visual") +
+  xlab("Columns") +
+  ylab("Rows")
 ```
-- Here, the horizotal bar chart (bottom-left) shows the total number of missing values in each column written on it's y-axis. 
-- The lines with dots at the bottom shows the patterns in missing values. Where, on the line, dots are plotted, it means that line represents pattern where the columns (included columns marked by dots) are missing and the vertical bar chart gives the number of missing in that pattern.
+
+This plot gives us a visual representation of how the missing values look in the dataset. On the y-axis, we can see the rows and on the x-axis we can see the columns. 27.3% of overall data is missing, which is represented by black colour in the plot. It is clear from the plot that columns related to different vehicles involved in the accident are among the ones with the highest missing values. This further reinforces our hypothesis in the previous analysis that majority of accidents involve at most 2 vehicles.
+
+There might be a possibilty that we are not able to visualise the columns which have less number of missing values. Thus, we will now look into the summary table for the missing values of the data.
+
+```{r message=FALSE, warning=FALSE}
+miss_var_summary(full_data)
+```
+This summary table gives us the number and proportion of missing values in each column. We can  see that there are certain columns which do not have any missing values. These columns will help us in our analysis where we have to count the number of rows but the other columns are missing, thus facilitate in showing missing values or no values in other columns. 
+Such columns can be COLLISION_ID, ACCIDENT DATE.
+
+## Missing values pattern analysis: whole data
+
+Here, we are starting by analysing the missing values' patterns of the full dataset.
+```{r message=FALSE, warning=FALSE, fig.width=5, fig.height=7, echo=FALSE}
+gg_miss_upset(full_data,  nsets = 14)
+```
+Guidelines to interpret the graph:
+- Here, the horizotal bar chart (bottom-left) shows the total number of missing values in each column (written on it's y-axis). 
+- The lines with dots (in the graph at the bottom) shows the patterns in missing values. On the line, where dots are present, it means that all those corresponding columns (on it's y-axis same as the previous point) are missing in that pattern. The number of missing values in that pattern is given by the vertical bar chart at the top.
+- The graph will get clearer in the analysis below.
 
 Using the plot, we are able to discern that:
-1. The pattern where maximum number of values are missing is the one with "off street name", "vehicle type code 3", "vehicle type code 4", "vehicle type code 5", "contributing factor vehicle 3", "contributing factor vehicle 4", "contributing factor vehicle 5", with a total of 693390 missing values. This accounts for approximately 43% of the total values. This means that, generally, accidents include 2 vehicles. We can further look into it by getting the count of rows where all the vehicle related columns are missing to reinforce this inference.
+1. The pattern where maximum number of values are missing is the one with "off street name", "vehicle type code 3", "vehicle type code 4", "vehicle type code 5", "contributing factor vehicle 3", "contributing factor vehicle 4", "contributing factor vehicle 5", with a total of 630756 rows. This accounts for approximately 49% of the total values. This may mean that, generally, accidents include 2 vehicles. We can further look into it by getting the count of rows where all the vehicle related columns are missing to reinforce this inference.
 
 
 ```{r message=FALSE, warning=FALSE}
@@ -25,31 +44,19 @@ vehicle_data_missing <- (subset(full_data, is.na(full_data$`VEHICLE TYPE CODE 3`
 
 sprintf("Rows with 3, 4, 5 vehicles missing: %d", (nrow(vehicle_data_missing)))
 sprintf("Total rows: %d", (nrow(full_data)))
+
+sprintf("Percent: %f", ((nrow(vehicle_data_missing))*100/(nrow(full_data))))
  
 ```
-After further investigation, it turns out that 91.5% of the data is consisted of accidents where at most 2 vehicles were involved. 
+After further investigation, it turns out that 91.7% of the data is consisted of accidents where at most 2 vehicles were involved. 
 
-2. Off street name is the only column where the values in it are missing when all the other columns are filled. Thus, it is clear that we cannot remove the missing values, at least in off street name as it will lead to loss of information.
+2. "Off street name" is the only column where the values in that column are missing when all the other columns are filled. Thus, it is clear that we cannot remove the missing values where "off street name" as it will lead to loss of information.
 
 3. There are certain rows where all the columns in the above plot are missing and we may have to look into these rows when we will start our investigation to see if we can/should remove these are not.
 
-```{r message=FALSE, warning=FALSE}
-# full data
-vis_miss(full_data, sort_miss = TRUE, warn_large_data = FALSE) + 
-  labs(title = "") +
-  xlab("") 
+## Missing values pattern analysis: location data
 
-miss_var_summary(full_data)
-```
-Visual representation of missing data
-No values are missing in:
-% missing % present
-table interpret
-
-
-location missing values may cause problem during spatial analysis 
-vehicle code and contributing factor 
-
+Another important aspect of our analysis is location. Now, we will try to find out patterns in the location related columns to see what kind of trends emerge there, what columns we can rely on and what columns we can use to extract necessary information.
 
 ```{r message=FALSE, warning=FALSE}
 # subset data to find missing values in location related fields
@@ -57,9 +64,12 @@ temp_data <- missing_data[, c(1,3:10)]
 gg_miss_upset(temp_data, nsets = 10)
 ```
 
+There are 30020 rows in the data where no location related values are there. In this case we can drop the missing value rows and proceed with our analysis. However it is a strange and interesting observation that there is no location related information. This means that accidents are being reported there but there location is not. This may need a much deeper investigation which is out of the scope of this project, but may reveal interesting facts.
 
-# Missing borough values analysis
 
+## Missing borough analysis
+
+Now, we will be inspecting the data where boroughs are missing. 
 ```{r message=FALSE, warning=FALSE}
 library(ggmap)
 
@@ -77,6 +87,5 @@ ggmap(map) + geom_point(aes(x = data_miss_bor_latlong$LONGITUDE, y = data_miss_b
 
 ```
 
-Other than the random missing values, the incidents reported on state highways having missing borough values. This could be because the highways often connect multiple boroughs are are not part of any particular borough.
-
+This inspection reveals amusing results. When faceted on years, we can see that before 2016, the boroughs were missing along the main highways. One hyoothesis for this could be: these highways connect different boroughs or pass through different boroughs were not reported as a part of one borough. After (and including) 2016, borough values were missing inside the boroughs as well. Again, this investigation is out of the scope of this project, but may reveal some interesting results and can be investigated, in future.
 
