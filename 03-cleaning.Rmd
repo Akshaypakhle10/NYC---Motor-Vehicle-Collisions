@@ -1,1 +1,61 @@
+---
+output: html_document
+editor_options: 
+chunk_output_type: console
+---
+
+# Data transformation
+
+- Th. date split
+
+```{r}
+library(naniar)
+library(tidyverse)
+library(readr)
+library(maptools)
+library(ggmap)
+library(ggrepel)
+library(lubridate)
+```
+
+******* image (location) - explain how got coords *******
+
+```{r message=FALSE}
+# MAIN CLEANED DATA
+data <- subset(data, (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
+
+missing_data <- data <- subset(data,  is.na(LATITUDE) | is.na(LONGITUDE) | (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
+```
+
+```{r}
+data_sample <- sample_n(data,50000, set.seed=69)
+```
+
+
+- dates factors
+
+```{r}
+#Converting the categorical columns into factors
+cols_to_be_factors = c(3, 7:10, 19:23)
+
+data[cols_to_be_factors] = lapply(data[cols_to_be_factors], factor)
+data_sample[cols_to_be_factors] = lapply(data_sample[cols_to_be_factors], factor)
+```
+
+```{r}
+#Converting the Date column into Date class.
+# cols_to_be_dates = c(1, 30:32)
+# 
+# data[cols_to_be_dates] = lapply(data[cols_to_be_dates], date)
+# data_sample[cols_to_be_dates] = lapply(data_sample[cols_to_be_dates], date)
+
+data$`ACCIDENT DATE` = as.Date(data$`ACCIDENT DATE`)
+data_sample$`ACCIDENT DATE` = as.Date(data_sample$`ACCIDENT DATE`)
+```
+- save clean data
+- # = 0
+
+
+
+
 
