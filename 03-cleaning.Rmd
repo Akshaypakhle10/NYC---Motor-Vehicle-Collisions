@@ -1,49 +1,72 @@
----
-output: html_document
-editor_options: 
-chunk_output_type: console
----
+# Data sources
 
-# Data transformation
-
-- Th. date split
-
-
-******* image (location) - explain how got coords *******
-
-![]("")
+- Challenges
+- Data sources
+- Dataset and columns explanation
 
 ```{r message=FALSE, warning=FALSE}
-# MAIN CLEANED DATA
-data <- subset(data, (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
-
-missing_data <- data <- subset(data,  is.na(LATITUDE) | is.na(LONGITUDE) | (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
+library(naniar)
+library(tidyverse)
+library(readr)
+library(maptools)
+library(ggmap)
+library(ggrepel)
+library(lubridate)
+library(ggplot2)
+library(gridExtra)
+library(grid)
+library(ggpubr)
+library(cowplot)
 ```
+
+<<<<<<< HEAD
+```{r}
+dim(data)
+```
+
+The dataset consists of about 1.6 million reported incidents. We have about 29 features or decriptors for each data point. The names of these features and their data types are displayed below.
+
+```{r}
+as.matrix(lapply(data,class))
+```
+ The names are quite self-explainatory but a few notes have been highlighted below:
+- Depending on the number of vehicles involved in the crash the columns "CONTRIBUTING FACTOR VEHICLE 2", "CONTRIBUTING FACTOR VEHICLE 3", "CONTRIBUTING FACTOR VEHICLE 4" and "CONTRIBUTING FACTOR VEHICLE 5" may be missing. Similarly "VEHICLE TYPE CODE 2", "VEHICLE TYPE CODE 3", "VEHICLE TYPE CODE 4" and "VEHICLE TYPE CODE 5" could be missing for smaller crashes.
+- The columns "CROSS STREET NAME", "OFF STREET NAME", "ON STREET NAME", "ZIP CODE" and "LOCATION" are redundant as well as less accurate and are hence not used for location based analysis. We instead use the latitudes and longitudes. It should be noted that the dataset does not report the exact corrdinate of the collision, instead, it reports the coordinates of the nearest intersection.
+- "NUMBER OF PERSONS INJURED/KILLED" is the aggregation of the columns "NUMBER OF CYCLIST INJURED/KILLED" , "NUMBER OF MOTORIST INJURED/KILLED" and "NUMBER OF PEDESTRIANS INJURED/KILLED".
+
+We also use google static maps API to for plotting the spatial data. Instead of overlaying the image in the backgroud this gives us more control over the exploration.
+=======
+```{r message=FALSE, warning=FALSE}
+data <- read_csv("dataset/MVC_split.csv")
+```
+
+Let's see how our dataset looks like, it's a huge dataset with 29 variables and over 1.6 million rows. 
+
+```{r}
+head(data)
+```
+
+We might need to use a sample of the data in some places. Let's have a look at the sample of 50,000 rows.
+
+```{r}
+dim(data_sample)
+```
+
+```{r}
+head(data_sample)
+```
+>>>>>>> c176b0af6430ce29b5533f880314e8d7896cb374
+
+```{r}
+colnames(data_sample)
+```
+
 
 ```{r message=FALSE, warning=FALSE}
-data_sample <- sample_n(data,50000, set.seed=69)
+api_key = "AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8"
 ```
 
+This project explores the more recent data from NYC Open Data for Motor vehicle Collisions[Data Set](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
 
-- dates factors
-
-```{r message=FALSE, warning=FALSE}
-#Converting the categorical columns into factors
-cols_to_be_factors = c(3, 7:10, 19:23)
-
-data[cols_to_be_factors] = lapply(data[cols_to_be_factors], factor)
-data_sample[cols_to_be_factors] = lapply(data_sample[cols_to_be_factors], factor)
-```
-
-```{r message=FALSE, warning=FALSE}
-#Converting the Date column into Date class.
-data$`ACCIDENT DATE` = as.Date(data$`ACCIDENT DATE`)
-data_sample$`ACCIDENT DATE` = as.Date(data_sample$`ACCIDENT DATE`)
-```
-
-- save clean data
-
-
-
-
+This dataset can also be reached and interacted with through its [Google BigQuery location](https://bigquery.cloud.google.com/table/bigquery-public-data:new_york.nypd_mv_collisions?tab=schema)
 
