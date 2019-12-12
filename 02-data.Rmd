@@ -1,9 +1,5 @@
 # Data sources
 
-- Challenges
-- Data sources
-- Dataset and columns explanation
-
 ```{r message=FALSE, warning=FALSE}
 library(naniar)
 library(tidyverse)
@@ -19,7 +15,14 @@ library(ggpubr)
 library(cowplot)
 ```
 
-<<<<<<< HEAD
+This project explores the more recent data from NYC Open Data for Motor vehicle Collisions[Data Set](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
+
+This dataset can also be reached and interacted with through its [Google BigQuery location](https://bigquery.cloud.google.com/table/bigquery-public-data:new_york.nypd_mv_collisions?tab=schema)
+
+```{r message=FALSE, warning=FALSE}
+data <- read_csv("dataset/MVC_split.csv")
+```
+
 ```{r}
 dim(data)
 ```
@@ -35,38 +38,8 @@ as.matrix(lapply(data,class))
 - "NUMBER OF PERSONS INJURED/KILLED" is the aggregation of the columns "NUMBER OF CYCLIST INJURED/KILLED" , "NUMBER OF MOTORIST INJURED/KILLED" and "NUMBER OF PEDESTRIANS INJURED/KILLED".
 
 We also use google static maps API to for plotting the spatial data. Instead of overlaying the image in the backgroud this gives us more control over the exploration.
-=======
-```{r message=FALSE, warning=FALSE}
-data <- read_csv("dataset/MVC_split.csv")
-```
-
-Let's see how our dataset looks like, it's a huge dataset with 29 variables and over 1.6 million rows. 
-
-```{r}
-head(data)
-```
-
-We might need to use a sample of the data in some places. Let's have a look at the sample of 50,000 rows.
-
-```{r}
-dim(data_sample)
-```
-
-```{r}
-head(data_sample)
-```
->>>>>>> c176b0af6430ce29b5533f880314e8d7896cb374
-
-```{r}
-colnames(data_sample)
-```
-
 
 ```{r message=FALSE, warning=FALSE}
 api_key = "AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8"
 ```
-
-This project explores the more recent data from NYC Open Data for Motor vehicle Collisions[Data Set](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).
-
-This dataset can also be reached and interacted with through its [Google BigQuery location](https://bigquery.cloud.google.com/table/bigquery-public-data:new_york.nypd_mv_collisions?tab=schema)
 
