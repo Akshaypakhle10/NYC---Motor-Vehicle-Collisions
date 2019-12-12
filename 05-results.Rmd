@@ -102,6 +102,12 @@ The highlighted spot corresponds to the ending of Brooklyn bridge which connects
 ### Inference for Staten Island:
 In Staten Island, then accident prone areas seem to be Oakwood, Midland Beach, New Dorp, Richmond and Bay Terrace
 
+### Inference for Brooklyn:
+The highlighted spot corresponds to the ending of Brooklyn bridge which connects Manhattan to Brooklyn. This is expected as at such bridge junctions, bottlenecks occur. Also, people from Brooklyn generally come to Manhattan for work or for other attractions. Thus, leading to increase in chances of accidents, especially during the rush hour.
+
+### Inference for Staten Island:
+In Staten Island, then accident prone areas seem to be Oakwood, Midland Beach, New Dorp, Richmond and Bay Terrace
+
 ## Which are the most accident-prone Boroughs?
 ```{r message=FALSE, warning=FALSE}
 data_subset <- subset(data, !is.na(data$BOROUGH))
@@ -151,6 +157,7 @@ ggplot(data_subset,aes(x=YEAR,fill=BOROUGH )) +
     ylab("Number of Accidents")+
     ggtitle("Borough-wise Accidents in NY from 2012-2019")+theme_minimal() + scale_fill_brewer(palette = "Set2")+
   scale_y_continuous(labels = scales::comma)
+
 
 ```
 -Firstly, since the dataset has comparitively less values for the year 2012, that's why the bars for that year are significantly smaller than compared to the rest. This is probably because of the way the data was collected, and the amount of records that were digitized. It would only be fair to compare the trends from 2013 onwards as we have comparable amount of data over the rest of the years until 2019.
@@ -204,7 +211,7 @@ ggplot(new,aes(x=TIME,y=total,group=BOROUGH, colour = BOROUGH)) + geom_point() +
       labs(title='Borough-wise Hourly Proportion of Accidents',
            x='Hour of the day',
            y='Proportion of Accidents')+
-      theme_classic()
+      theme_minimal()
 
 ```
 
@@ -231,7 +238,6 @@ data %>%
 - We can clearly see that there is one incidence when more than 25 pedestrians were injured. After looking through the data and investigating online, we were able to find a corresponding headline in The New York Times. This incident corresponds to May 18, 2017, when a car rammed into pedestrians in Time Square, killing 1 and injuring more than 20 people. (source: https://www.nytimes.com/2017/05/18/nyregion/times-square-crash.html)
 
 - Next, we can see the most significant outlier of the plot, that is when more than 40 motorists were injured. After investigating online and browsing through the data, we were able to find out that this correponds to September 9, 2013 when an MTA bus collided with a car in Brooklyn. 40+ pepople inside the bus were injured. Since these people were inside the bus, they are considered in the category of motorists. (source: https://newyork.cbslocal.com/2013/09/09/brooklyn-bus-accident-leaves-at-least-6-injured/)
-
 
 
 
@@ -310,7 +316,9 @@ ggplot(how_lethal,aes(x = fct_reorder(BOROUGH,lethal_accidents,.desc = TRUE), y 
 - This leads us to infer that even though Manhattan is the most accident-prone Borough, most of the accidents don't cause deaths, infact upon further investigation on online sources, it is seen that many cases wherein there are quite a lot of accidents that lead to no/minor injuries, but they have to be reported to file for insurance claims of the vehicles and the victims involved. Also, another reason is that Manhattan is a pretty densely-populated area with highly regulated traffic rules and slow zones, which might be one of the causes that although this increases the probability of accidents happening, the impact of the collision of the vehicles at low speeds might not lead to deaths.
 
 
+
 ## What are the actual numbers of Injuries/Deaths due to accidents over the years? 
+
 
 We will plot the number of people killed or injured in the past years.
 
@@ -347,6 +355,13 @@ ggplot(kill_inj, aes(x=YEAR,y=value)) + geom_line(colour="#00C5CD") +geom_point(
 We can see that there was a sharp increase in both, the number of people killed and in the number of people injured from 2012 to 2013. This might be because we have more data available from 2013, than from 2012. 
 
 There was a decline in the number of persons killed from 2013 to 2016, and in the nunmber of persons injured from 2013 to 2015.
+
+
+Both the number have increased from 2016-2017.
+
+One trend which we can notice is that, when the number of people killed were on a rise from 2016 to 2017, there came a drop in the numbers from 2017 to 2019. This may be the outcome of the Vision Zero policy that was implemented by the government of NY in 2016, which aimed at reducing the number of fatalities and injuries during accidents. The number of people injured from 2016 to 2018 (not including 2019 as the year is still running) have increased, but it's pace has greatly decreased compared to 2 years before that year, that is, the pace of increase in number of people injured has definitely slow down from 2017-2018, as compared to 2015-2017. 
+A reason for this can be that under Vision Zero poilcy, governemnt decalred some slow zones with speed limit of 25mph. Thus, there were still accidents (indicating the slowed down number of injuries), but the impact of accidents was reduced because of the slow speed of the vehicles. Meaning, the accidents were not a fatal as they earlier were. Seems like th Vision Zero policy had a positive impact on the number of people killed/injured.
+
 
 Both the number have increased from 2016-2017.
 
