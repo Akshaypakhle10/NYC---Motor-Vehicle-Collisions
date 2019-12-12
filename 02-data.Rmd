@@ -12,7 +12,6 @@ library(ggplot2)
 library(gridExtra)
 library(grid)
 library(ggpubr)
-library(cowplot)
 ```
 
 This project explores the more recent data from NYC Open Data for Motor vehicle Collisions[Data Set](https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95).

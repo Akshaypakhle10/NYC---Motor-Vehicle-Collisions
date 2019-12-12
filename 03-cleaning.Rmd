@@ -39,4 +39,4 @@ data_sample$`ACCIDENT DATE` = as.Date(data_sample$`ACCIDENT DATE`)
 Saving transformed data frame as csv
 ```{r message=FALSE, warning=FALSE}
 write_csv(data,"data/clean_data.csv")
-```
+
