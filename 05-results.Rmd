@@ -1,5 +1,16 @@
 # Results
 
+## Introduction
+
+NOTE: We have taken special steps to ensure that colorblind people can visualise our graph as accurately as possbile.
+
+```{r}
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+```
+
+## How does the data look on the map?
+
+Let us start by looking at the spatial orientation of the number of accidents by creating a density plot.
 ```{r message=FALSE, warning=FALSE}
 register_google(key = api_key)
 
@@ -16,7 +27,8 @@ plot_m <- ggmap(map_m) + stat_density2d(
     size = 0.001, bins = 100, data = data_m,
     geom = "polygon"
   ) + scale_fill_viridis_c() +
-      labs(x='Longitude',
+      labs(title= "MANHATTAN", 
+           x='Longitude',
            y='Latitude') + theme_minimal()
 
 
@@ -28,7 +40,8 @@ plot_q <- ggmap(map_q) + stat_density2d(
     size = 0.001, bins = 100, data = data_q,
     geom = "polygon"
   ) + scale_fill_viridis_c()+
-      labs(x='Longitude',
+      labs(title= "QUEENS", 
+           x='Longitude',
            y='Latitude') + theme_minimal()
 
 
@@ -40,9 +53,9 @@ plot_bx <- ggmap(map_bx) + stat_density2d(
     size = 0.001, bins = 100, data = data_bx,
     geom = "polygon"
   ) + scale_fill_viridis_c() +
-      labs(x='Longitude',
+      labs(title= "BRONX", 
+           x='Longitude',
            y='Latitude') + theme_minimal()
-
 
 
 data_bl = subset(data, !is.na(data$LATITUDE) & !is.na(data$LONGITUDE) & data$LATITUDE!=0 & data$LONGITUDE!=0 & data$BOROUGH=="BROOKLYN")
@@ -52,7 +65,8 @@ plot_bl <- ggmap(map_bl) + stat_density2d(
     size = 0.001, bins = 100, data = data_bl,
     geom = "polygon"
   ) + scale_fill_viridis_c() +
-      labs(x='Longitude',
+      labs(title= "BROOKLYN", 
+           x='Longitude',
            y='Latitude') + theme_minimal()
 
 
@@ -64,13 +78,31 @@ plot_s <- ggmap(map_s) + stat_density2d(
     size = 0.001, bins = 100, data = data_s,
     geom = "polygon"
   ) + scale_fill_viridis_c() +
-      labs(x='Longitude',
+      labs(title= "STATEN ISLAND", 
+           x='Longitude',
            y='Latitude') + theme_minimal()
 ```
 
 ```{r fig.keep='all', message=FALSE, warning=FALSE, results='hide', echo=FALSE}
-ggarrange(plot_m, plot_q, plot_bx, plot_bl, plot_s, ncol=2, labels = c("Manhattan", "Queens", "Bronx", "Brooklyn", "Staten Island"))
+ggarrange(plot_m, plot_q, plot_bx, plot_bl, plot_s, ncol=2)
 ```
+
+We can clearly see for all the boroughs that the accidents are not evenly distributed and there are certain zones where the density is higher. This is one of the factors that gives way to  our analysis.
+
+### Inference for Manhattan 
+The higher density of accidents seem to be concentrated towards the Midtown-Downtown part of the borough. This might be due to high commotion at these locations. Firstly, these locations are have high population density which increases the chance of accidents, especially with people jay-walking. Secondly, a lot of offices are in these locations and there is a high probability of accidents during the rush hour as people come from different places to work. Thirdly, these locations have tourist attractions and that leads to more people coming to these locations from various places, leading to increased chances of accidents. Lastly, these locations (especially Midtown) have a lot of bars and other nightlife restaurants. People may be drinking and driving leading to higher density of accidents. 
+
+### Inference for Queens: 
+The highlighed zone in Queens' plot is Flushing area which is densely populated and has popular spots, such as Queens' library, SSA office, USPS etc. The library generally attracts more students and may lead to increased traffic because of them. Also, people and officials go to SSA office for official work and such places are generally crowded. For USPS, they generally have their delivery trucks coming in and going out, which contributes significantly to traffic.
+
+### Inference for Bronx:
+The highest density spot is marked by the merger of two popular expressways; the Sheridan expressway and Bruckner expressway. It becomes more clear now why this is a dense spot as merger of expressway act as bottleneck for the traffic, where people usually drive as faster speeds, than in the cities.
+
+### Inference for Brooklyn:
+The highlighted spot corresponds to the ending of Brooklyn bridge which connects Manhattan to Brooklyn. This is expected as at such bridge junctions, bottlenecks occur. Also, people from Brooklyn generally come to Manhattan for work or for other attractions. Thus, leading to increase in chances of accidents, especially during the rush hour.
+
+### Inference for Staten Island:
+In Staten Island, then accident prone areas seem to be Oakwood, Midland Beach, New Dorp, Richmond and Bay Terrace
 
 
 ```{r message=FALSE, warning=FALSE}
@@ -118,7 +150,7 @@ ggplot(data_subset,aes(x=YEAR,fill=BOROUGH )) +
   scale_x_continuous(breaks = c(2012, 2013,2014,2015,2016,2017,2018,2019) ) +
   xlab("Borough")+
     ylab("Number of Accidents")+
-    ggtitle("Borough-wise Accidents in NY from 2012-2019")+theme_minimal() + scale_fill_brewer(palette = "Set2")
+    ggtitle("Borough-wise Accidents in NY from 2012-2019")+theme_minimal() +  scale_fill_manual(values=cbPalette)#scale_fill_brewer(palette = "Set2")
 ```
 
 
@@ -165,8 +197,9 @@ ggplot(new,aes(x=TIME,y=total,group=BOROUGH, colour = BOROUGH)) + geom_point() +
 ```
 
 
+## Are there any extreme accidents?
 
-
+We will now try to find out the accidents where significantly high number of people were killed or injured, and further try to investigate them.
 ```{r message=FALSE, warning=FALSE}
 data %>%
   select(`NUMBER OF CYCLIST INJURED`, `NUMBER OF PEDESTRIANS INJURED`,`NUMBER OF MOTORIST INJURED`, `NUMBER OF CYCLIST KILLED`, `NUMBER OF PEDESTRIANS KILLED`, `NUMBER OF MOTORIST KILLED`) %>% 
@@ -177,8 +210,9 @@ data %>%
            y='Count',
            x='')
 ```
-# car rams times sq: 5/18/17 - 27
-# BUS ACCIDENT: 9/9/2013 - 43
+- We can clearly see that there is one incidence when more than 25 pedestrians were injured. After looking through the data and investigating online, we were able to find a corresponding headline in The New York Times. This incident corresponds to May 18, 2017, when a car rammed into pedestrians in Time Square, killing 1 and injuring more than 20 people. (source: https://www.nytimes.com/2017/05/18/nyregion/times-square-crash.html)
+
+- Next, we can see the most significant outlier of the plot, that is when more than 40 motorists were injured. After investigating online and browsing through the data, we were able to find out that this correponds to September 9, 2013 when an MTA bus collided with a car in Brooklyn. 40+ pepople inside the bus were injured. Since these people were inside the bus, they are considered in the category of motorists. (source: https://newyork.cbslocal.com/2013/09/09/brooklyn-bus-accident-leaves-at-least-6-injured/)
 
 
 
@@ -244,7 +278,9 @@ ggplot(how_lethal,aes(x = fct_reorder(BOROUGH,lethal_accidents,.desc = TRUE), y 
 
 
 
+## Is there any change in harm to people in the recent years?
 
+We will plot the number of people killed or injured in the past years.
 
 ```{r message=FALSE, warning=FALSE}
 clean_data <- data
@@ -261,6 +297,7 @@ ggplot(kill_inj, aes(x=YEAR,y=value,colour=key)) + geom_line() +geom_point() +# 
     ggtitle("Number of People Killed/Injured in Accidents from 2012-2019")+theme_minimal()
 ```
 
+We are able to see the trend for number of persons injured outweight the number of people killed, thus, we are not able to visualise the data of number of people killed. For this, we will create another plot just to visualise the number of people killed.
 
 ```{r message=FALSE, warning=FALSE}
 kill_inj <- clean_data %>%
@@ -271,9 +308,19 @@ kill_inj <- clean_data %>%
 ggplot(kill_inj, aes(x=YEAR,y=value)) + geom_line(colour="#00C5CD") +geom_point(,colour="#00C5CD") +# facet_wrap(.~key, scales = "free", ncol = 1) + scale_x_continuous(breaks = c(2012:2019))+ scale_fill_brewer(palette = "Set2")+
   xlab("Year")+
     ylab("Count")+
-    ggtitle("Number of People Injured in Accidents from 2012-2019")+theme_minimal() +
+    ggtitle("Number of People Killed in Accidents from 2012-2019")+theme_minimal() +
   scale_y_continuous(limits=c(0,250))
 ```
+
+We can see that there was a sharp increase in both, the number of people killed and in the number of people injured from 2012 to 2013. This might be because we have more data available from 2013, than from 2012. 
+
+There was a decline in the number of persons killed from 2013 to 2016, and in the nunmber of persons injured from 2013 to 2015.
+
+Both the number have increased from 2016-2017.
+
+One trend which we can notice is that, when the number of people killed were on a rise from 2016 to 2017, there came a drop in the numbers from 2017 to 2019. This may be the outcome of the Vision Zero policy that was implemented by the government of NY in 2016, which aimed at reducing the number of fatalities and injuries during accidents. The number of people injured from 2016 to 2018 (not including 2019 as the year is still running) have increased, but it's pace has greatly decreased compared to 2 years before that year, that is, the pace of increase in number of people injured has definitely slow down from 2017-2018, as compared to 2015-2017. 
+A reason for this can be that under Vision Zero poilcy, governemnt decalred some slow zones with speed limit of 25mph. Thus, there were still accidents (indicating the slowed down number of injuries), but the impact of accidents was reduced because of the slow speed of the vehicles. Meaning, the accidents were not a fatal as they earlier were. Seems like th Vision Zero policy had a positive impact on the number of people killed/injured.
+
 
 
 

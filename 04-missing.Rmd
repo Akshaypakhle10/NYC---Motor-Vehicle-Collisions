@@ -1,6 +1,6 @@
 # Missing Value Analysis
 
-## Why analyse missing values?
+## Why to analyse missing values?
 In this section, we will try to analyse trends in missing values of the datset. It is important to analyse missing values' trends as they might tell something about the question we are trying to investigate, and also to see if we will be able to investigate the questions under consideration. If the data required for investigation is missing, we will have to take the help of external data sources. In other words, inspecting the trends among missing values will give a direction to our investigation. 
 
 ## Visual representation of missing values in dataset
