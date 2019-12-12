@@ -160,7 +160,7 @@ ggplot(new,aes(x=TIME,y=total,group=BOROUGH, colour = BOROUGH)) + geom_point() +
       labs(title='Borough-wise Hourly Proportion of Accidents',
            x='Hour of the day',
            y='Proportion of Accidents')+
-      theme_classic()
+      theme_minimal()
 
 ```
 
@@ -251,17 +251,29 @@ clean_data <- data
 clean_data[is.na(clean_data)] <- 0
 
 kill_inj <- clean_data %>%
-  select(YEAR, `NUMBER OF PERSONS KILLED`, `NUMBER OF PERSONS INJURED`) %>%
+  select(YEAR,`NUMBER OF PERSONS INJURED`, `NUMBER OF PERSONS KILLED`) %>%
   group_by(YEAR) %>%  summarise_each(funs(sum)) %>%
   gather("key","value",-YEAR)
 
-ggplot(kill_inj) + geom_bar(aes(x=YEAR,y=value,fill=key),position="dodge",stat="identity") + facet_wrap(.~key, scales = "free", ncol = 1) + scale_x_continuous(breaks = c(2012:2019))+ scale_fill_brewer(palette = "Set2")+
+ggplot(kill_inj, aes(x=YEAR,y=value,colour=key)) + geom_line() +geom_point() +# facet_wrap(.~key, scales = "free", ncol = 1) + scale_x_continuous(breaks = c(2012:2019))+ scale_fill_brewer(palette = "Set2")+
   xlab("Year")+
     ylab("Count")+
     ggtitle("Number of People Killed/Injured in Accidents from 2012-2019")+theme_minimal()
 ```
 
 
+```{r message=FALSE, warning=FALSE}
+kill_inj <- clean_data %>%
+  select(YEAR, `NUMBER OF PERSONS KILLED`) %>%
+  group_by(YEAR) %>%  summarise_each(funs(sum)) %>%
+  gather("key","value",-YEAR)
+
+ggplot(kill_inj, aes(x=YEAR,y=value)) + geom_line(colour="#00C5CD") +geom_point(,colour="#00C5CD") +# facet_wrap(.~key, scales = "free", ncol = 1) + scale_x_continuous(breaks = c(2012:2019))+ scale_fill_brewer(palette = "Set2")+
+  xlab("Year")+
+    ylab("Count")+
+    ggtitle("Number of People Injured in Accidents from 2012-2019")+theme_minimal() +
+  scale_y_continuous(limits=c(0,250))
+```
 
 
 
