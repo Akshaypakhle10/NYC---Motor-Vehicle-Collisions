@@ -513,7 +513,7 @@ df_top <- df_vehicle_top%>%
       theme_minimal()
 ```
 
-Other than the obvious maximum of consumer vehicles such as SUV and Sedans,the next in line are the commercial 4/6 wheelers, taxis and busses. The categories Sedans, SUV and Taxi account for most of the crashes but this is rooted on the fact that they are an aggregation of a large type of vehicles or , in other words ,represent a huge majority of the vehicles on the road. Thus, this graph does not divulge much information due to the aggregated nature of the categories, and we shall focus on the time and spatial analysis of the crashes.
+Other than the obvious maximum of consumer vehicles such as SUV and Sedans,the next in line are the commercial 4/6 wheelers, taxis and busses. The categories Sedans, SUV and Taxi account for most of the crashes but this is roosted on the fact that they are an aggregation of a large type of vehicles or , in other words ,represent a huge majority of the vehicles on the road. Thus, this graph does not divulge much information due to the aggregated nature of the categories, and we shall focus on the time and spatial analysis of the crashes.
 
 Let's see the most accident-prone places in terms of no. of Accidents. Since, the data specifies that the police officer usually notes down the closest intersection of street and avenue, it would be logical to find out the  most accident-prone places based on these parameters, and I think this is the best approximation that we can get given the data.
 
