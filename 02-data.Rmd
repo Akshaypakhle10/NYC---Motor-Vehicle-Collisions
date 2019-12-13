@@ -44,6 +44,6 @@ as.matrix(lapply(data,class))
 We also use google static maps API to for plotting the spatial data. Instead of overlaying the image in the backgroud this gives us more control over the exploration.
 
 ```{r message=FALSE, warning=FALSE}
-api_key = "AIzaSyBiUv8OS_lQQyxfz5ljAl2MaUUqJgKK_F8"
+api_key = "API_KEY"
 ```
 
