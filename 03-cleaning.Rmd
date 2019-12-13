@@ -6,13 +6,20 @@ High-level spatial mapping in Plotly
 
 ![](data/media/map.png)
 
+Data Cleaning Steps:
+- Removing anomalies in Latitude and Longitude values.
+- Converting the categorical columns into factors.
+- Converting the Date column into Date class.
+- Saving transformed data frame as csv
+
+
 There are certain latitudes and longitudes that are not part of the state of new york but are still part of this dataset. Since our analysis is only related to NYC, we drop these values by crosschecking the lat-longs with the boundaries of NYC.
 
 ```{r message=FALSE, warning=FALSE}
 # MAIN CLEANED DATA
-data <- subset(data, (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
-
 missing_data <- data <- subset(data,  is.na(LATITUDE) | is.na(LONGITUDE) | (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
+
+data <- subset(data, (LATITUDE >= 40.496942  & LONGITUDE >= -74.258905 & LATITUDE <= 40.882507  & LONGITUDE <= -73.789791))
 ```
 
 We create a subset by sampling 50,000 rows from the original data. This specificly comes in handy when the original dataset is unwieldy.
@@ -20,8 +27,11 @@ We create a subset by sampling 50,000 rows from the original data. This specific
 data_sample <- sample_n(data,50000, set.seed=69)
 ```
 
-Ensuring appropriate factor representation for columns.
+
+
+
 ```{r message=FALSE, warning=FALSE}
+#Ensuring appropriate factor representation for columns.
 #Converting the categorical columns into factors
 cols_to_be_factors = c(3, 7:10, 19:23)
 
@@ -29,14 +39,15 @@ data[cols_to_be_factors] = lapply(data[cols_to_be_factors], factor)
 data_sample[cols_to_be_factors] = lapply(data_sample[cols_to_be_factors], factor)
 ```
 
-Parsing date columns 
 ```{r message=FALSE, warning=FALSE}
+#Parsing date columns 
 #Converting the Date column into Date class.
 data$`ACCIDENT DATE` = as.Date(data$`ACCIDENT DATE`)
 data_sample$`ACCIDENT DATE` = as.Date(data_sample$`ACCIDENT DATE`)
 ```
 
-Saving transformed data frame as csv
 ```{r message=FALSE, warning=FALSE}
+#Saving transformed data frame as csv
 write_csv(data,"data/clean_data.csv")
 
+```

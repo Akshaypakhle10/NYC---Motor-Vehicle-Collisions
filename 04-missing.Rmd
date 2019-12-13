@@ -5,21 +5,21 @@ In this section, we will try to analyse trends in missing values of the datset. 
 
 ## Visual representation of missing values in dataset
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=8, fig.height=10}
 full_data <- missing_data[, -c(30, 31, 32)]
 
 vis_miss(full_data, sort_miss = TRUE, warn_large_data = FALSE) + 
   labs(title = "Missing Data Visual") +
   xlab("Columns") +
-  ylab("Rows")
+  ylab("Rows") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-This plot gives us a visual representation of how the missing values look in the dataset. On the y-axis, we can see the rows and on the x-axis we can see the columns. 27.3% of overall data is missing, which is represented by black colour in the plot. It is clear from the plot that columns related to different vehicles involved in the accident are among the ones with the highest missing values. This further reinforces our hypothesis in the previous analysis that majority of accidents involve at most 2 vehicles.
+This plot gives us a visual representation of how the missing values look in the dataset. On the y-axis, we can see the rows and on the x-axis we can see the columns. 29.4% of overall data is missing, which is represented by black colour in the plot. It is clear from the plot that columns related to different vehicles involved in the accident are among the ones with the highest missing values. This further reinforces our hypothesis in the previous analysis that majority of accidents involve at most 2 vehicles.
 
 There might be a possibilty that we are not able to visualise the columns which have less number of missing values. Thus, we will now look into the summary table for the missing values of the data.
 
 ```{r message=FALSE, warning=FALSE}
-miss_var_summary(full_data)
+tail(miss_var_summary(full_data), 9)
 ```
 This summary table gives us the number and proportion of missing values in each column. We can  see that there are certain columns which do not have any missing values. These columns will help us in our analysis where we have to count the number of rows but the other columns are missing, thus facilitate in showing missing values or no values in other columns. 
 Such columns can be COLLISION_ID, ACCIDENT DATE.
@@ -27,9 +27,10 @@ Such columns can be COLLISION_ID, ACCIDENT DATE.
 ## Missing values pattern analysis: whole data
 
 Here, we are starting by analysing the missing values' patterns of the full dataset.
-```{r message=FALSE, warning=FALSE, fig.width=5, fig.height=7, echo=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=7, echo=FALSE}
 gg_miss_upset(full_data,  nsets = 14)
 ```
+  
 Guidelines to interpret the graph:
 - Here, the horizotal bar chart (bottom-left) shows the total number of missing values in each column (written on it's y-axis). 
 - The lines with dots (in the graph at the bottom) shows the patterns in missing values. On the line, where dots are present, it means that all those corresponding columns (on it's y-axis same as the previous point) are missing in that pattern. The number of missing values in that pattern is given by the vertical bar chart at the top.
@@ -58,7 +59,7 @@ After further investigation, it turns out that 91.7% of the data is consisted of
 
 Another important aspect of our analysis is location. Now, we will try to find out patterns in the location related columns to see what kind of trends emerge there, what columns we can rely on and what columns we can use to extract necessary information.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=5, echo=FALSE}
 # subset data to find missing values in location related fields
 temp_data <- missing_data[, c(1,3:10)]
 gg_miss_upset(temp_data, nsets = 10)
@@ -70,7 +71,7 @@ There are 30020 rows in the data where no location related values are there. In 
 ## Missing borough analysis
 
 Now, we will be inspecting the data where boroughs are missing. 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=8, fig.height=8, echo=FALSE}
 library(ggmap)
 
 

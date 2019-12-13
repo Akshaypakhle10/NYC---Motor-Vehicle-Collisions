@@ -1,5 +1,5 @@
 --- 
-title: "NYC - Motor Vehicle Collisions"
+title: "Exploration and Analysis of NYC Accidents"
 author: "Akshay Pakhle, Harguna Sood, Karthik Rajaraman"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -18,4 +18,3 @@ This analysis investigates:
 - Increase in severity of crashes
 
 We have also created an interactive plot that helps in quick exploration of the distribution of crashes over time.
-

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Missing Value Analysis | Exploration and Analysis of NYC Accidents</title>
+  <meta name="description" content="Chapter 4 Missing Value Analysis | Exploration and Analysis of NYC Accidents" />
+  <meta name="generator" content="bookdown 0.16 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Missing Value Analysis | Exploration and Analysis of NYC Accidents" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Missing Value Analysis | Exploration and Analysis of NYC Accidents" />
+  
+  
+  
+
+<meta name="author" content="Akshay Pakhle, Harguna Sood, Karthik Rajaraman" />
+
+
+<meta name="date" content="2019-12-12" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="data-transformation.html"/>
+<link rel="next" href="results.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">EDA-NYC-Accidents</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="4" data-path="missing-value-analysis.html"><a href="missing-value-analysis.html"><i class="fa fa-check"></i><b>4</b> Missing Value Analysis</a><ul>
+<li class="chapter" data-level="4.1" data-path="missing-value-analysis.html"><a href="missing-value-analysis.html#why-to-analyse-missing-values"><i class="fa fa-check"></i><b>4.1</b> Why to analyse missing values?</a></li>
+<li class="chapter" data-level="4.2" data-path="missing-value-analysis.html"><a href="missing-value-analysis.html#visual-representation-of-missing-values-in-dataset"><i class="fa fa-check"></i><b>4.2</b> Visual representation of missing values in dataset</a></li>
+<li class="chapter" data-level="4.3" data-path="missing-value-analysis.html"><a href="missing-value-analysis.html#missing-values-pattern-analysis-whole-data"><i class="fa fa-check"></i><b>4.3</b> Missing values pattern analysis: whole data</a></li>
+<li class="chapter" data-level="4.4" data-path="missing-value-analysis.html"><a href="missing-value-analysis.html#missing-values-pattern-analysis-location-data"><i class="fa fa-check"></i><b>4.4</b> Missing values pattern analysis: location data</a></li>
+<li class="chapter" data-level="4.5" data-path="missing-value-analysis.html"><a href="missing-value-analysis.html#missing-borough-analysis"><i class="fa fa-check"></i><b>4.5</b> Missing borough analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#how-does-the-data-look-on-the-map"><i class="fa fa-check"></i><b>5.1</b> How does the data look on the map?</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#inference-for-manhattan"><i class="fa fa-check"></i><b>5.1.1</b> Inference for Manhattan</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#inference-for-queens"><i class="fa fa-check"></i><b>5.1.2</b> Inference for Queens:</a></li>
+<li class="chapter" data-level="5.1.3" data-path="results.html"><a href="results.html#inference-for-bronx"><i class="fa fa-check"></i><b>5.1.3</b> Inference for Bronx:</a></li>
+<li class="chapter" data-level="5.1.4" data-path="results.html"><a href="results.html#inference-for-brooklyn"><i class="fa fa-check"></i><b>5.1.4</b> Inference for Brooklyn:</a></li>
+<li class="chapter" data-level="5.1.5" data-path="results.html"><a href="results.html#inference-for-staten-island"><i class="fa fa-check"></i><b>5.1.5</b> Inference for Staten Island:</a></li>
+<li class="chapter" data-level="5.1.6" data-path="results.html"><a href="results.html#inference-for-brooklyn-1"><i class="fa fa-check"></i><b>5.1.6</b> Inference for Brooklyn:</a></li>
+<li class="chapter" data-level="5.1.7" data-path="results.html"><a href="results.html#inference-for-staten-island-1"><i class="fa fa-check"></i><b>5.1.7</b> Inference for Staten Island:</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#which-are-the-most-accident-prone-boroughs"><i class="fa fa-check"></i><b>5.2</b> Which are the most accident-prone Boroughs?</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#analyzing-accident-trends-over-time."><i class="fa fa-check"></i><b>5.3</b> Analyzing accident trends over time.</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="results.html"><a href="results.html#how-are-the-accidents-distributed-over-years"><i class="fa fa-check"></i><b>5.3.1</b> How are the accidents distributed over Years?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#are-there-any-extreme-accidents"><i class="fa fa-check"></i><b>5.4</b> Are there any extreme accidents?</a></li>
+<li class="chapter" data-level="5.5" data-path="results.html"><a href="results.html#how-bad-were-the-accidents-and-how-many-of-them-led-to-deaths"><i class="fa fa-check"></i><b>5.5</b> How bad were the accidents, and how many of them led to deaths?</a></li>
+<li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#what-are-the-actual-numbers-of-injuriesdeaths-due-to-accidents-over-the-years"><i class="fa fa-check"></i><b>5.6</b> What are the actual numbers of Injuries/Deaths due to accidents over the years?</a></li>
+<li class="chapter" data-level="5.7" data-path="results.html"><a href="results.html#what-are-the-most-common-causes"><i class="fa fa-check"></i><b>5.7</b> What are the most common causes?</a><ul>
+<li class="chapter" data-level="5.7.1" data-path="results.html"><a href="results.html#are-these-causes-common-amongst-all-the-boroughs"><i class="fa fa-check"></i><b>5.7.1</b> Are these causes common amongst all the Boroughs?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="results.html"><a href="results.html#what-are-the-overall-top-25-most-accident-prone-intersections"><i class="fa fa-check"></i><b>5.8</b> What are the overall Top-25 most-accident prone intersections?</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a><ul>
+<li class="chapter" data-level="7.1" data-path="conclusion.html"><a href="conclusion.html#limitations"><i class="fa fa-check"></i><b>7.1</b> Limitations:</a></li>
+<li class="chapter" data-level="7.2" data-path="conclusion.html"><a href="conclusion.html#future-work"><i class="fa fa-check"></i><b>7.2</b> Future Work:</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Exploration and Analysis of NYC Accidents</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="missing-value-analysis" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Missing Value Analysis</h1>
+<div id="why-to-analyse-missing-values" class="section level2">
+<h2><span class="header-section-number">4.1</span> Why to analyse missing values?</h2>
+<p>In this section, we will try to analyse trends in missing values of the datset. It is important to analyse missing values’ trends as they might tell something about the question we are trying to investigate, and also to see if we will be able to investigate the questions under consideration. If the data required for investigation is missing, we will have to take the help of external data sources. In other words, inspecting the trends among missing values will give a direction to our investigation.</p>
+</div>
+<div id="visual-representation-of-missing-values-in-dataset" class="section level2">
+<h2><span class="header-section-number">4.2</span> Visual representation of missing values in dataset</h2>
+<p><img src="_main_files/figure-html/unnamed-chunk-11-1.png" width="768" /></p>
+<p>This plot gives us a visual representation of how the missing values look in the dataset. On the y-axis, we can see the rows and on the x-axis we can see the columns. 29.4% of overall data is missing, which is represented by black colour in the plot. It is clear from the plot that columns related to different vehicles involved in the accident are among the ones with the highest missing values. This further reinforces our hypothesis in the previous analysis that majority of accidents involve at most 2 vehicles.</p>
+<p>There might be a possibilty that we are not able to visualise the columns which have less number of missing values. Thus, we will now look into the summary table for the missing values of the data.</p>
+<pre><code>## # A tibble: 9 x 3
+##   variable                      n_miss pct_miss
+##   &lt;chr&gt;                          &lt;int&gt;    &lt;dbl&gt;
+## 1 ACCIDENT DATE                      0        0
+## 2 ACCIDENT TIME                      0        0
+## 3 NUMBER OF PEDESTRIANS INJURED      0        0
+## 4 NUMBER OF PEDESTRIANS KILLED       0        0
+## 5 NUMBER OF CYCLIST INJURED          0        0
+## 6 NUMBER OF CYCLIST KILLED           0        0
+## 7 NUMBER OF MOTORIST INJURED         0        0
+## 8 NUMBER OF MOTORIST KILLED          0        0
+## 9 COLLISION_ID                       0        0</code></pre>
+<p>This summary table gives us the number and proportion of missing values in each column. We can see that there are certain columns which do not have any missing values. These columns will help us in our analysis where we have to count the number of rows but the other columns are missing, thus facilitate in showing missing values or no values in other columns.
+Such columns can be COLLISION_ID, ACCIDENT DATE.</p>
+</div>
+<div id="missing-values-pattern-analysis-whole-data" class="section level2">
+<h2><span class="header-section-number">4.3</span> Missing values pattern analysis: whole data</h2>
+<p>Here, we are starting by analysing the missing values’ patterns of the full dataset.
+<img src="_main_files/figure-html/unnamed-chunk-13-1.png" width="1152" /></p>
+<p>Guidelines to interpret the graph:
+- Here, the horizotal bar chart (bottom-left) shows the total number of missing values in each column (written on it’s y-axis).
+- The lines with dots (in the graph at the bottom) shows the patterns in missing values. On the line, where dots are present, it means that all those corresponding columns (on it’s y-axis same as the previous point) are missing in that pattern. The number of missing values in that pattern is given by the vertical bar chart at the top.
+- The graph will get clearer in the analysis below.</p>
+<p>Using the plot, we are able to discern that:
+1. The pattern where maximum number of values are missing is the one with “off street name”, “vehicle type code 3”, “vehicle type code 4”, “vehicle type code 5”, “contributing factor vehicle 3”, “contributing factor vehicle 4”, “contributing factor vehicle 5”, with a total of 630756 rows. This accounts for approximately 49% of the total values. This may mean that, generally, accidents include 2 vehicles. We can further look into it by getting the count of rows where all the vehicle related columns are missing to reinforce this inference.</p>
+<pre><code>## [1] &quot;Rows with 3, 4, 5 vehicles missing: 1352706&quot;</code></pre>
+<pre><code>## [1] &quot;Total rows: 1475518&quot;</code></pre>
+<pre><code>## [1] &quot;Percent: 91.676686&quot;</code></pre>
+<p>After further investigation, it turns out that 91.7% of the data is consisted of accidents where at most 2 vehicles were involved.</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>“Off street name” is the only column where the values in that column are missing when all the other columns are filled. Thus, it is clear that we cannot remove the missing values where “off street name” as it will lead to loss of information.</p></li>
+<li><p>There are certain rows where all the columns in the above plot are missing and we may have to look into these rows when we will start our investigation to see if we can/should remove these are not.</p></li>
+</ol>
+</div>
+<div id="missing-values-pattern-analysis-location-data" class="section level2">
+<h2><span class="header-section-number">4.4</span> Missing values pattern analysis: location data</h2>
+<p>Another important aspect of our analysis is location. Now, we will try to find out patterns in the location related columns to see what kind of trends emerge there, what columns we can rely on and what columns we can use to extract necessary information.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="1152" /></p>
+<p>There are 30020 rows in the data where no location related values are there. In this case we can drop the missing value rows and proceed with our analysis. However it is a strange and interesting observation that there is no location related information. This means that accidents are being reported there but there location is not. This may need a much deeper investigation which is out of the scope of this project, but may reveal interesting facts.</p>
+</div>
+<div id="missing-borough-analysis" class="section level2">
+<h2><span class="header-section-number">4.5</span> Missing borough analysis</h2>
+<p>Now, we will be inspecting the data where boroughs are missing.
+<img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<p>This inspection reveals amusing results. When faceted on years, we can see that before 2016, the boroughs were missing along the main highways. One hyoothesis for this could be: these highways connect different boroughs or pass through different boroughs were not reported as a part of one borough. After (and including) 2016, borough values were missing inside the boroughs as well. Again, this investigation is out of the scope of this project, but may reveal some interesting results and can be investigated, in future.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="data-transformation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/Akshaypakhle10/NYC---Motor-Vehicle-Collisions/edit/master/04-missing.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/Akshaypakhle10/NYC---Motor-Vehicle-Collisions/blob/master/04-missing.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
